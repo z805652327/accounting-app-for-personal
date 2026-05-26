@@ -1,6 +1,6 @@
 {
-  "appId": "com.ledger.app",
-  "appName": "精账簿",
+  "appId": "com.finbook.app",
+  "appName": "FinBook",
   "webDir": "dist",
   "server": {
     "androidScheme": "http"
