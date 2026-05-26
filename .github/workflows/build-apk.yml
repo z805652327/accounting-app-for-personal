@@ -36,7 +36,9 @@ jobs:
           packages: 'platforms;android-34 build-tools;34.0.0'
 
       - name: Generate Capacitor assets
-        run: npx cap sync android
+        run: |
+          npx cap add android
+          npx cap sync android
 
       - name: Build APK
         working-directory: android
