@@ -70,7 +70,6 @@ async function savePin() {
 
 async function exportBackup() {
   const db = await getDatabase()
-  // Export all tables as JSON
   const tables = ['accounting_subjects', 'accounts', 'transactions', 'journal_entries',
     'amortization_schedules', 'depreciation_configs', 'investment_valuations',
     'investment_lots', 'budget_overall', 'budget_thresholds', 'pending_items']
@@ -78,10 +77,27 @@ async function exportBackup() {
   for (const t of tables) {
     data[t] = await db.query<any>(`SELECT * FROM ${t}`)
   }
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+  const json = JSON.stringify(data, null, 2)
+  const filename = `backup_${new Date().toISOString().slice(0, 10)}.json`
+
+  // Capacitor/Android: save to file system
+  try {
+    const { Filesystem, Directory } = await import('@capacitor/filesystem')
+    await Filesystem.writeFile({
+      path: `Download/FinBook/${filename}`,
+      data: json,
+      directory: Directory.External,
+      recursive: true,
+    })
+    uni.showToast({ title: '已保存到 Download/FinBook/' + filename })
+    return
+  } catch {}
+
+  // Desktop/Browser fallback
+  const blob = new Blob([json], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
-  a.href = url; a.download = `backup_${new Date().toISOString().slice(0, 10)}.json`
+  a.href = url; a.download = filename
   a.click()
   URL.revokeObjectURL(url)
   uni.showToast({ title: '备份已导出' })
