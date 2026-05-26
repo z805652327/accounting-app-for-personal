@@ -39,14 +39,34 @@
         </div>
       </div>
     </div>
+
+    <!-- Export path (Capacitor/Android only) -->
+    <div class="section" v-if="isCapacitor">
+      <div class="section-title">导出路径</div>
+      <div class="card">
+        <div class="form-row">
+          <span class="label">保存目录</span>
+          <el-input v-model="exportPath" placeholder="/Download/FinBook" />
+          <span class="hint">文件将保存到内部存储的此目录下</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { uni } from '@/uni-shim'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { getDatabase } from '@/database/factory'
 import { ExcelExportService } from '@/services/excel-export.service'
+
+const isCapacitor = ref(false)
+const exportPath = ref('/Download/FinBook')
+
+onMounted(() => {
+  try { isCapacitor.value = !!(window as any).Capacitor?.isNativePlatform() }
+  catch { isCapacitor.value = false }
+})
 
 async function checkPin(): Promise<boolean> {
   const db = await getDatabase()
@@ -76,7 +96,27 @@ const rptMonth = ref('')
 const fmt = ref('csv')
 const loading = ref(false)
 
-function downloadBlob(data: Uint8Array | string, filename: string, mime: string) {
+async function downloadBlob(data: Uint8Array | string, filename: string, mime: string) {
+  // Capacitor/Android: save to user-accessible directory
+  if (isCapacitor.value) {
+    try {
+      const { Filesystem, Directory } = await import('@capacitor/filesystem')
+      const content = typeof data === 'string' ? data : new Uint8Array(data)
+      const path = exportPath.value.replace(/\/$/, '') + '/' + filename
+      await Filesystem.writeFile({
+        path,
+        data: typeof content === 'string' ? content : new Uint8Array(content),
+        directory: Directory.External,
+        recursive: true,
+      })
+      uni.showToast({ title: '已保存到: ' + path })
+      return
+    } catch (e: any) {
+      uni.showToast({ title: '保存失败: ' + (e.message || '未知错误'), icon: 'none' })
+      return
+    }
+  }
+  // Desktop/Browser: download via blob
   const blob = typeof data === 'string'
     ? new Blob(['﻿' + data], { type: mime })
     : new Blob([data], { type: mime })
@@ -184,4 +224,5 @@ async function doExportReport(type: string) {
 }
 .fmt-chip.active { background: #C44536; color: #fff; }
 .btn-stack { display: flex; flex-direction: column; gap: 6px; }
+.hint { font-size: 11px; color: #9E9790; margin-top: 4px; display: block; }
 </style>

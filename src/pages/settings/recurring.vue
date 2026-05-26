@@ -29,28 +29,47 @@
     <div v-if="rules.length === 0" class="empty">暂无定期记账规则</div>
     <el-button type="primary" class="fab" @click="showAdd = true">+ 新增规则</el-button>
 
-    <el-dialog v-model="showAdd" @close="showAdd = false">
-      <div class="popup-form">
-        <div class="pf-title">新增定期记账</div>
-        <el-input v-model="form.name" placeholder="描述（如：每月房租）" />
-        <el-input v-model="form.amount" type="number" placeholder="金额" />
-
-        <picker :value="txTypeIndex" :range="txTypeOptions" @change="onTxTypeChange">
-          <div class="picker">类型：{{ txTypeOptions[txTypeIndex] }}</div>
-        </picker>
-        <picker :value="freqIndex" :range="freqOptions" @change="onFreqChange">
-          <div class="picker">频率：{{ freqOptions[freqIndex] }}</div>
-        </picker>
-
-        <el-input v-model="subjectName" readonly placeholder="选择科目" @focus="pickSubject()" />
-        <el-input v-model="accountName" readonly placeholder="选择账户" @focus="pickAccount()" />
-        <el-input v-model="toAccountName" readonly placeholder="目标账户(转账时填)" @focus="pickToAccount()" />
-        <el-input v-model="form.note" placeholder="备注(选填)" />
-        <el-input v-model="form.startDate" placeholder="生效日期 YYYY-MM-DD" />
-        <el-input v-model="form.endDate" placeholder="结束日期(选填) YYYY-MM-DD" />
-
+    <el-dialog v-model="showAdd" title="新增定期记账" width="400px" :close-on-click-modal="false">
+      <el-form label-width="80px" size="default">
+        <el-form-item label="描述">
+          <el-input v-model="form.name" placeholder="如：每月房租" />
+        </el-form-item>
+        <el-form-item label="金额">
+          <el-input v-model="form.amount" type="number" placeholder="金额" />
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-select v-model="txTypeIndex" style="width:100%">
+            <el-option v-for="(label, idx) in txTypeOptions" :key="idx" :label="label" :value="idx" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="频率">
+          <el-select v-model="freqIndex" style="width:100%">
+            <el-option v-for="(label, idx) in freqOptions" :key="idx" :label="label" :value="idx" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="科目">
+          <el-input v-model="subjectName" readonly placeholder="选择科目" @focus="pickSubject()" />
+        </el-form-item>
+        <el-form-item label="账户">
+          <el-input v-model="accountName" readonly placeholder="选择账户" @focus="pickAccount()" />
+        </el-form-item>
+        <el-form-item label="对方账户">
+          <el-input v-model="toAccountName" readonly placeholder="转账时填写" @focus="pickToAccount()" />
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="form.note" placeholder="选填" />
+        </el-form-item>
+        <el-form-item label="生效日期">
+          <el-input v-model="form.startDate" placeholder="YYYY-MM-DD" />
+        </el-form-item>
+        <el-form-item label="结束日期">
+          <el-input v-model="form.endDate" placeholder="选填" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="showAdd = false">取消</el-button>
         <el-button type="primary" @click="doAdd" :loading="saving">保存</el-button>
-      </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -78,9 +97,9 @@ const txTypeNames: Record<string, string> = {
 const txTypeIndex = ref(1)
 const txTypeOptions = txTypes.map(t => txTypeNames[t])
 
-const freqLabels: Record<string, string> = { monthly: '每月', quarterly: '每季', yearly: '每年' }
-const freqOptions = ['每月', '每季', '每年']
-const freqValues = ['monthly', 'quarterly', 'yearly']
+const freqLabels: Record<string, string> = { daily: '每天', weekly: '每周', monthly: '每月', quarterly: '每季', yearly: '每年' }
+const freqOptions = ['每天', '每周', '每月', '每季', '每年']
+const freqValues = ['daily', 'weekly', 'monthly', 'quarterly', 'yearly']
 const freqIndex = ref(0)
 
 const form = ref<Record<string, string>>({})
@@ -159,9 +178,6 @@ function getAccountName(id: number): string {
   return acc ? acc.name : `#${id}`
 }
 
-function onTxTypeChange(e: any) { txTypeIndex.value = e.detail.value }
-function onFreqChange(e: any) { freqIndex.value = e.detail.value }
-
 async function doAdd() {
   saving.value = true
   try {
@@ -230,8 +246,4 @@ onShow(() => load())
 .footer-date { font-size: 11px; color: #9E9790; }
 .empty { text-align: center; color: #9E9790; padding: 30px; font-size: 14px; }
 .fab { position: fixed; bottom: 70px; left: 15px; right: 15px; width: auto; }
-.popup-form { padding: 15px; width: 300px; }
-.pf-title { font-size: 16px; font-weight: bold; margin-bottom: 10px; text-align: center; }
-.popup-form :deep(.u-input) { margin-bottom: 8px; }
-.picker { font-size: 14px; padding: 10px 0; color: #1C1915; }
 </style>

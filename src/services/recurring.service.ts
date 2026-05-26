@@ -13,7 +13,7 @@ export interface RecurringRule {
   accountId: number | null
   toAccountId: number | null
   note: string | null
-  frequency: 'monthly' | 'quarterly' | 'yearly'
+  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly'
   startDate: string
   endDate: string | null
   isActive: boolean
@@ -164,6 +164,32 @@ export class RecurringService {
     const now = todayStr()
     if (rule.startDate > now) return null
 
+    // Daily: due every day starting from startDate
+    if (rule.frequency === 'daily') {
+      // If last generated is today, skip
+      if (rule.lastGenerated === now) return null
+      return now
+    }
+
+    // Weekly: due on same day-of-week as startDate
+    if (rule.frequency === 'weekly') {
+      const start = new Date(rule.startDate)
+      const startDow = start.getDay() // 0=Sun, 1=Mon, ...
+      const today = new Date(now)
+      const todayDow = today.getDay()
+      // Days since the last occurrence (this week's occurrence)
+      const daysSince = (todayDow - startDow + 7) % 7
+      const thisWeekDue = new Date(today)
+      thisWeekDue.setDate(today.getDate() - daysSince)
+      const dueStr = thisWeekDue.toISOString().slice(0, 10)
+      // Return this week's due date if >= lastGenerated and <= now
+      if (dueStr <= now && (!rule.lastGenerated || rule.lastGenerated < dueStr)) {
+        return dueStr
+      }
+      return null
+    }
+
+    // Monthly / Quarterly / Yearly
     const [sy, sm] = rule.startDate.split('-').map(Number)
     const [ny, nm] = now.split('-').map(Number)
     const totalMonthsNow = ny * 12 + nm
@@ -172,15 +198,12 @@ export class RecurringService {
     const freqMonths = rule.frequency === 'monthly' ? 1
       : rule.frequency === 'quarterly' ? 3 : 12
 
-    // How many full periods have elapsed
     const periodsElapsed = Math.floor((totalMonthsNow - totalMonthsStart) / freqMonths)
-    // Next due is the upcoming period
     const nextPeriod = periodsElapsed * freqMonths
     const totalMonths = totalMonthsStart + nextPeriod
     const year = Math.floor((totalMonths - 1) / 12)
     const month = ((totalMonths - 1) % 12) + 1
 
-    // Handle month overflow (e.g. Jan 31 → Feb 28)
     let day = parseInt(rule.startDate.slice(8, 10)) || 1
     const dim = new Date(year, month, 0).getDate()
     if (day > dim) day = dim

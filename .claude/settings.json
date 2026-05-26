@@ -341,7 +341,14 @@
       "Bash(\"D:/Git/bin/git.exe\" status *)",
       "Bash(\"D:/Git/bin/git.exe\" init *)",
       "Bash(\"D:/Git/bin/git.exe\" add *)",
-      "Bash(D:/Git/bin/git.exe commit -m ' *)"
+      "Bash(D:/Git/bin/git.exe commit -m ' *)",
+      "Bash(\"D:/Git/bin/git.exe\" config *)",
+      "Bash(\"D:/Git/bin/git.exe\" remote *)",
+      "Bash(\"D:/Git/bin/git.exe\" push *)",
+      "Bash(\"D:/Git/bin/git.exe\" archive *)",
+      "Bash(\"D:/node.js/node.exe\" -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('package.json','utf-8'\\)\\).version\\)\")",
+      "Bash(\"D:/Git/bin/git.exe\" commit *)",
+      "Bash(\"D:/node.js/node.exe\" -e \"const fs=require\\('fs'\\);const files=fs.readdirSync\\('.'\\).filter\\(f=>f.startsWith\\('capacitor'\\)||f.startsWith\\('cap'\\)\\);console.log\\(files.join\\('\\\\n'\\)\\)\")"
     ],
     "additionalDirectories": [
       "D:\\accounting app"
