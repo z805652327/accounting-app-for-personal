@@ -1,0 +1,13 @@
+{
+  "appId": "com.ledger.app",
+  "appName": "精账簿",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "http"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}

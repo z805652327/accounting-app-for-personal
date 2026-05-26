@@ -1,0 +1,29 @@
+/* Design system — CSS custom properties (replaces SCSS variables for plain Vite builds) */
+:root {
+  --color-bg: #F2EFE9;
+  --color-bg-alt: #E8E4DC;
+  --color-surface: #FDFCF9;
+  --color-surface-hover: #F7F4EE;
+  --color-primary: #1C1915;
+  --color-accent: #C44536;
+  --color-accent-light: #D6685B;
+  --color-accent-muted: #A83A2D;
+  --color-income: #2D7D7A;
+  --color-income-bg: #EDF6F5;
+  --color-expense: #C44536;
+  --color-expense-bg: #FDF4F2;
+  --color-text-primary: #1C1915;
+  --color-text-secondary: #6B6560;
+  --color-text-tertiary: #9E9790;
+  --color-border: #E0DBD3;
+  --color-border-light: #EDE8E0;
+  --color-ink-gradient: linear-gradient(160deg, #1C1915 0%, #2D2A26 60%, #3D3A35 100%);
+  --font-display: 'Noto Serif SC', 'STSong', serif;
+  --font-mono: 'DM Mono', 'JetBrains Mono', monospace;
+  --shadow-sm: 0 1rpx 4rpx rgba(28,25,21,0.04);
+  --transition-fast: 180ms cubic-bezier(0.4,0,0.2,1);
+  --transition-normal: 300ms cubic-bezier(0.4,0,0.2,1);
+  --transition-slow: 500ms cubic-bezier(0.4,0,0.2,1);
+  --radius-md: 8rpx;
+  --radius-lg: 12rpx;
+}

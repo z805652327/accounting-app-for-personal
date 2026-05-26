@@ -1,0 +1,137 @@
+/* ═══════════════════════════════════════
+   Component Stubs Styling · 精账簿
+   Japanese Stationery × Swiss Precision
+   ═══════════════════════════════════════ */
+
+/* ── Input ── */
+.stub-input-wrap {
+  position: relative; width: 100%;
+}
+.stub-input {
+  width: 100%; padding: 10px 12px;
+  border: 1px solid #E0DBD3; border-radius: 6px;
+  font-size: 14px; font-family: inherit;
+  background: #FDFCF9; color: #1C1915;
+  box-sizing: border-box; outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.stub-input:focus {
+  border-color: #C44536;
+  box-shadow: 0 0 0 2px rgba(196,69,54,0.08);
+}
+.stub-input::placeholder { color: #B5AFA6; }
+.stub-input-disabled .stub-input,
+.stub-input[disabled] {
+  background: #F2EFE9; color: #9E9790; cursor: not-allowed;
+}
+
+/* Select-type input */
+.stub-input-select { cursor: pointer; }
+.stub-input-select .stub-input {
+  padding-right: 32px;
+}
+.stub-select-display {
+  display: flex; align-items: center;
+  min-height: 20px; user-select: none;
+}
+.stub-placeholder { color: #B5AFA6; }
+.stub-select-arrow {
+  position: absolute; right: 10px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px; color: #9E9790; pointer-events: none;
+}
+
+/* ── Button ── */
+.stub-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 8px 18px; border-radius: 6px;
+  border: 1px solid #E0DBD3; background: #FDFCF9;
+  color: #1C1915; font-size: 14px; font-family: inherit;
+  cursor: pointer; transition: all 0.15s;
+  white-space: nowrap; user-select: none;
+}
+.stub-btn:active { opacity: 0.85; transform: scale(0.97); }
+.stub-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.stub-btn-primary { background: #1C1915; color: #FCFAF7; border-color: #1C1915; }
+.stub-btn-warning { background: #E08900; color: #fff; border-color: #E08900; }
+.stub-btn-error { background: #C44536; color: #fff; border-color: #C44536; }
+.stub-btn-success { background: #2D7D7A; color: #fff; border-color: #2D7D7A; }
+.stub-btn-plain { background: transparent; border-color: transparent; }
+.stub-btn-plain.stub-btn-primary { color: #1C1915; background: transparent; }
+.stub-btn-plain.stub-btn-error { color: #C44536; background: transparent; }
+.stub-btn-sm { padding: 4px 12px; font-size: 12px; border-radius: 4px; }
+.stub-btn-lg { padding: 12px 28px; font-size: 16px; }
+
+/* ── Form ── */
+.stub-form { display: flex; flex-direction: column; gap: 0; }
+.stub-form-item {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 10px 0;
+}
+.stub-label {
+  font-size: 13px; color: #6B6560; font-weight: 500;
+  user-select: none;
+}
+
+/* ── Popup ── */
+.stub-popup-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+  z-index: 1000; display: flex; align-items: center; justify-content: center;
+}
+.stub-popup {
+  background: #FDFCF9; border-radius: 16px;
+  padding: 24px; width: 90vw; max-width: 420px;
+  max-height: 80vh; overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(28,25,21,0.15);
+}
+
+/* ── Switch ── */
+.stub-switch {
+  display: inline-flex; align-items: center; gap: 8px;
+  cursor: pointer; user-select: none;
+}
+.stub-switch input[type="checkbox"] {
+  width: 44px; height: 26px; appearance: none;
+  background: #D5D0C9; border-radius: 13px;
+  position: relative; cursor: pointer; margin: 0;
+  transition: background 0.2s;
+}
+.stub-switch input[type="checkbox"]::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #fff; transition: left 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.stub-switch input[type="checkbox"]:checked {
+  background: #C44536;
+}
+.stub-switch input[type="checkbox"]:checked::after {
+  left: 20px;
+}
+
+/* ── Radio ── */
+.stub-radio {
+  display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; padding: 4px 10px; font-size: 13px;
+  border-radius: 4px; transition: color 0.15s;
+}
+.stub-radio.checked { color: #C44536; font-weight: 600; }
+.stub-radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ── Loading ── */
+.stub-loading { font-size: 20px; animation: spin 1s linear infinite; }
+
+/* ── Picker ── */
+.stub-picker {
+  width: 100%; padding: 10px 12px;
+  border: 1px solid #E0DBD3; border-radius: 6px;
+  font-size: 14px; font-family: inherit;
+  background: #FDFCF9; color: #1C1915;
+  box-sizing: border-box; cursor: pointer;
+  appearance: auto; outline: none;
+  transition: border-color 0.18s;
+}
+.stub-picker:focus { border-color: #C44536; }
+.stub-picker:disabled { background: #F2EFE9; color: #9E9790; cursor: not-allowed; }
+
+@keyframes spin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }

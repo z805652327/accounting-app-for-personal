@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Test Render</title>
+</head>
+<body>
+<div id="app"></div>
+<script type="module">
+import { createApp, ref, onMounted } from 'vue'
+
+const app = createApp({
+  template: `<div style="padding:20px;font-family:sans-serif">
+    <h1 v-if="error" style="color:red">Error: {{ error }}</h1>
+    <h1 v-else-if="loading">Loading...</h1>
+    <h1 v-else style="color:green">Test OK! Data: {{ data }}</h1>
+  </div>`,
+  setup() {
+    const loading = ref(true)
+    const error = ref('')
+    const data = ref('')
+    onMounted(async () => {
+      try {
+        // Try to load DB
+        const { getDatabase } = await import('/src/database/factory.ts')
+        const db = await getDatabase()
+        const sub = await db.queryOne("SELECT name FROM accounting_subjects LIMIT 1")
+        data.value = sub ? sub.name : 'no data'
+      } catch(e) {
+        error.value = e.message
+      } finally {
+        loading.value = false
+      }
+    })
+    return { loading, error, data }
+  }
+})
+app.mount('#app')
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+/* Global page styles — replaces uni.scss for plain Vite H5 build */
+html, body, #app {
+  margin: 0; padding: 0;
+  font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+  color: #1C1915;
+  background: #F2EFE9;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}

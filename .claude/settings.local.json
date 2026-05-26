@@ -1,0 +1,44 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s \"http://localhost:5173/node_modules/uview-plus/index.js\")",
+      "Bash(curl -s \"http://localhost:5173/node_modules/uview-plus/components/u-form/u-form.vue\")",
+      "Bash(curl -s \"http://localhost:5173/node_modules/uview-plus/components/u-input/u-input.vue\")",
+      "Bash(node _debug5.mjs)",
+      "Bash(ELECTRON_RUN_AS_NODE= npx electron .)",
+      "Bash(python3 -c \"import sys,json; pages=json.load\\(sys.stdin\\); [print\\(f'{p[\\\\\"id\\\\\"][:8]}... {p[\\\\\"title\\\\\"]}'\\) for p in pages]\")",
+      "Bash(python3 -c \"import sys,json; pages=json.load\\(sys.stdin\\); [print\\(f'{p[\\\\\"id\\\\\"][:8]}... {p[\\\\\"url\\\\\"]}'\\) for p in pages]\")",
+      "Bash(python3 -c \"import sys,json; pages=json.load\\(sys.stdin\\); [print\\(f'{p[\\\\\"url\\\\\"][:80]}'\\) for p in pages]\")",
+      "Bash(python3 -c ' *)",
+      "Bash(env -u ELECTRON_RUN_AS_NODE npx electron .)",
+      "Bash(ps -W)",
+      "Bash(bash -c 'unset ELECTRON_RUN_AS_NODE && exec npx electron .')",
+      "Bash(timeout 15 bash -c 'unset ELECTRON_RUN_AS_NODE && env ELECTRON_RUN_AS_NODE=\"\" npx electron .')",
+      "Bash(env -u ELECTRON_RUN_AS_NODE \"node_modules/electron/dist/electron.exe\" --no-sandbox .)",
+      "Bash(\"node_modules/electron/dist/electron.exe\" --no-sandbox --remote-debugging-port=9223 .)",
+      "Bash(curl -s http://localhost:9223/json)",
+      "Bash(node node_modules/electron/cli.js --remote-debugging-port=9222 .)",
+      "Bash(env -u ELECTRON_RUN_AS_NODE node node_modules/electron/cli.js .)",
+      "Bash(env -u ELECTRON_RUN_AS_NODE bash -c 'echo \"VAR=${ELECTRON_RUN_AS_NODE:-unset}\"')",
+      "Bash(node electron/launcher.cjs)",
+      "Bash(curl -s http://localhost:9224/json)",
+      "Bash(node -e ' *)",
+      "Bash(awk '{print $1}')",
+      "Bash(taskkill /F /PID 29944)",
+      "Bash(taskkill /F /PID 603)",
+      "Bash(powershell.exe -Command \"Get-Process -Name electron -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue\")",
+      "Bash(# Remove temporary files *)",
+      "Bash(node _debug6.mjs)",
+      "Bash(node _debug8.mjs)",
+      "Bash(node _debug9.mjs)",
+      "Bash(node _debug10.mjs)",
+      "Bash(findstr :5173)",
+      "Bash(findstr :5175)",
+      "Bash(findstr :5178)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5175)"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
+    ]
+  }
+}

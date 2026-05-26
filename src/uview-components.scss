@@ -1,0 +1,711 @@
+/* === u-input === */
+.u-input {
+    @include flex(row);
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+
+    &--radius,
+    &--square {
+        border-radius: 4px;
+    }
+
+    &--no-radius {
+        border-radius: 0;
+    }
+
+    &--circle {
+        border-radius: 100px;
+    }
+
+    &__content {
+        flex: 1;
+        @include flex(row);
+        align-items: center;
+        justify-content: space-between;
+
+        &__field-wrapper {
+            position: relative;
+            @include flex(row);
+            margin: 0;
+            flex: 1;
+			
+			&__field {
+				line-height: 26px;
+				text-align: left;
+				color: $u-main-color;
+				height: 24px;
+				font-size: 15px;
+				flex: 1;
+			}
+        }
+
+        &__clear {
+            width: 20px;
+            height: 20px;
+            border-radius: 100px;
+            background-color: #c6c7cb;
+            @include flex(row);
+            align-items: center;
+            justify-content: center;
+            transform: scale(0.82);
+            margin-left: 4px;
+        }
+
+        &__subfix-icon {
+            margin-left: 4px;
+        }
+
+        &__prefix-icon {
+            margin-right: 4px;
+        }
+    }
+}
+
+/* === u-button === */
+// nvue下hover-class无效
+$u-button-before-top:50% !default;
+$u-button-before-left:50% !default;
+$u-button-before-width:100% !default;
+$u-button-before-height:100% !default;
+$u-button-before-transform:translate(-50%, -50%) !default;
+$u-button-before-opacity:0 !default;
+$u-button-before-background-color:#000 !default;
+$u-button-before-border-color:#000 !default;
+$u-button-active-before-opacity:.15 !default;
+$u-button-icon-margin-left:4px !default;
+$u-button-plain-u-button-info-color:$u-info;
+$u-button-plain-u-button-success-color:$u-success;
+$u-button-plain-u-button-error-color:$u-error;
+$u-button-plain-u-button-warning-color:$u-warning;
+
+.u-button {
+	width: 100%;
+	white-space: nowrap;
+	
+	&__text {
+		white-space: nowrap;
+		line-height: 1;
+	}
+	
+	&:before {
+		position: absolute;
+		top:$u-button-before-top;
+		left:$u-button-before-left;
+		width:$u-button-before-width;
+		height:$u-button-before-height;
+		border: inherit;
+		border-radius: inherit;
+		transform:$u-button-before-transform;
+		opacity:$u-button-before-opacity;
+		content: " ";
+		background-color:$u-button-before-background-color;
+		border-color:$u-button-before-border-color;
+	}
+	
+	&--active {
+		&:before {
+			opacity: .15
+		}
+	}
+	
+	&__icon+&__text:not(:empty),
+	&__loading-text {
+		margin-left:$u-button-icon-margin-left;
+	}
+	
+	&--plain {
+		&.u-button--primary {
+			color: $u-primary;
+		}
+	}
+	
+	&--plain {
+		&.u-button--info {
+			color:$u-button-plain-u-button-info-color;
+		}
+	}
+	
+	&--plain {
+		&.u-button--success {
+			color:$u-button-plain-u-button-success-color;
+		}
+	}
+	
+	&--plain {
+		&.u-button--error {
+			color:$u-button-plain-u-button-error-color;
+		}
+	}
+	
+	&--plain {
+		&.u-button--warning {
+			color:$u-button-plain-u-button-warning-color;
+		}
+	}
+}
+$u-button-u-button-height: 40px !default;
+$u-button-text-font-size: 15px !default;
+$u-button-loading-text-font-size: 15px !default;
+$u-button-loading-text-margin-left: 4px !default;
+$u-button-large-width: 100% !default;
+$u-button-large-height: 50px !default;
+$u-button-normal-padding: 0 12px !default;
+$u-button-large-padding: 0 15px !default;
+$u-button-normal-font-size: 14px !default;
+$u-button-small-min-width: 60px !default;
+$u-button-small-height: 30px !default;
+$u-button-small-padding: 0px 8px !default;
+$u-button-mini-padding: 0px 8px !default;
+$u-button-small-font-size: 12px !default;
+$u-button-mini-height: 22px !default;
+$u-button-mini-font-size: 10px !default;
+$u-button-mini-min-width: 50px !default;
+$u-button-disabled-opacity: 0.5 !default;
+$u-button-info-color: $u-main-color !default;
+$u-button-info-background-color: var(--up-button-info-background-color, var(--up-card-bg-color, #fff)) !default;
+$u-button-info-border-color: $u-border-color !default;
+$u-button-info-border-width: 1px !default;
+$u-button-info-border-style: solid !default;
+$u-button-success-color: #fff !default;
+$u-button-success-background-color: $u-success !default;
+$u-button-success-border-color: $u-button-success-background-color !default;
+$u-button-success-border-width: 1px !default;
+$u-button-success-border-style: solid !default;
+$u-button-primary-color: #fff !default;
+$u-button-primary-background-color: $u-primary !default;
+$u-button-primary-border-color: $u-button-primary-background-color !default;
+$u-button-primary-border-width: 1px !default;
+$u-button-primary-border-style: solid !default;
+$u-button-error-color: #fff !default;
+$u-button-error-background-color: $u-error !default;
+$u-button-error-border-color: $u-button-error-background-color !default;
+$u-button-error-border-width: 1px !default;
+$u-button-error-border-style: solid !default;
+$u-button-warning-color: #fff !default;
+$u-button-warning-background-color: $u-warning !default;
+$u-button-warning-border-color: $u-button-warning-background-color !default;
+$u-button-warning-border-width: 1px !default;
+$u-button-warning-border-style: solid !default;
+$u-button-block-width: 100% !default;
+$u-button-circle-border-top-right-radius: 100px !default;
+$u-button-circle-border-top-left-radius: 100px !default;
+$u-button-circle-border-bottom-left-radius: 100px !default;
+$u-button-circle-border-bottom-right-radius: 100px !default;
+$u-button-square-border-top-right-radius: 3px !default;
+$u-button-square-border-top-left-radius: 3px !default;
+$u-button-square-border-bottom-left-radius: 3px !default;
+$u-button-square-border-bottom-right-radius: 3px !default;
+$u-button-icon-min-width: 1em !default;
+$u-button-plain-background-color: var(--up-button-plain-background-color, var(--up-card-bg-color, #fff)) !default;
+$u-button-hairline-border-width: 0.5px !default;
+
+.u-button {
+    height: $u-button-u-button-height;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    @include flex;
+    box-sizing: border-box;flex-direction: row;
+
+    &__text {
+        font-size: $u-button-text-font-size;
+    }
+
+    &__loading-text {
+        font-size: $u-button-loading-text-font-size;
+        margin-left: $u-button-loading-text-margin-left;
+    }
+
+    &--large {
+        width: $u-button-large-width;height: $u-button-large-height;
+        padding: $u-button-large-padding;
+    }
+
+    &--normal {
+        padding: $u-button-normal-padding;
+        font-size: $u-button-normal-font-size;
+    }
+
+    &--small {
+        min-width: $u-button-small-min-width;height: $u-button-small-height;
+        padding: $u-button-small-padding;
+        font-size: $u-button-small-font-size;
+    }
+
+    &--mini {
+        height: $u-button-mini-height;
+        font-size: $u-button-mini-font-size;
+        min-width: $u-button-mini-min-width;padding: $u-button-mini-padding;
+    }
+
+    &--disabled {
+        opacity: $u-button-disabled-opacity;
+    }
+
+    &--info {
+        color: $u-button-info-color;
+        background-color: $u-button-info-background-color;
+        border-color: $u-button-info-border-color;
+        border-width: $u-button-info-border-width;
+        border-style: $u-button-info-border-style;
+    }
+
+    &--success {
+        color: $u-button-success-color;
+        background-color: $u-button-success-background-color;
+        border-color: $u-button-success-border-color;
+        border-width: $u-button-success-border-width;
+        border-style: $u-button-success-border-style;
+    }
+
+    &--primary {
+        color: $u-button-primary-color;
+        background-color: $u-button-primary-background-color;
+        border-color: $u-button-primary-border-color;
+        border-width: $u-button-primary-border-width;
+        border-style: $u-button-primary-border-style;
+    }
+
+    &--error {
+        color: $u-button-error-color;
+        background-color: $u-button-error-background-color;
+        border-color: $u-button-error-border-color;
+        border-width: $u-button-error-border-width;
+        border-style: $u-button-error-border-style;
+    }
+
+    &--warning {
+        color: $u-button-warning-color;
+        background-color: $u-button-warning-background-color;
+        border-color: $u-button-warning-border-color;
+        border-width: $u-button-warning-border-width;
+        border-style: $u-button-warning-border-style;
+    }
+
+    &--block {
+        @include flex;
+        width: $u-button-block-width;
+    }
+
+    &--circle {
+        border-top-right-radius: $u-button-circle-border-top-right-radius;
+        border-top-left-radius: $u-button-circle-border-top-left-radius;
+        border-bottom-left-radius: $u-button-circle-border-bottom-left-radius;
+        border-bottom-right-radius: $u-button-circle-border-bottom-right-radius;
+    }
+
+    &--square {
+        border-bottom-left-radius: $u-button-square-border-top-right-radius;
+        border-bottom-right-radius: $u-button-square-border-top-left-radius;
+        border-top-left-radius: $u-button-square-border-bottom-left-radius;
+        border-top-right-radius: $u-button-square-border-bottom-right-radius;
+    }
+
+    &__icon {
+        min-width: $u-button-icon-min-width;
+        line-height: inherit !important;
+        vertical-align: top;}
+
+    &--plain {
+        background-color: $u-button-plain-background-color;
+    }
+
+    &--hairline {
+        border-width: $u-button-hairline-border-width !important;
+    }
+}
+
+/* === u-form === */
+
+
+/* === u-form-item === */
+.u-form-item {
+		@include flex(column);
+		font-size: 14px;
+		color: $u-main-color;
+
+		&__body {
+			@include flex;
+			padding: 10px 0;
+
+			&__left {
+				@include flex;
+				align-items: center;
+
+				&__content {
+					position: relative;
+					@include flex;
+					align-items: center;
+					padding-right: 10rpx;
+					flex: 1;
+
+					&__icon {
+						margin-right: 8rpx;
+					}
+
+					&__required {
+						position: absolute;
+						left: -9px;
+						color: $u-error;
+						line-height: 20px;
+						font-size: 20px;
+						top: 3px;
+					}
+
+					&__label {
+						@include flex;
+						align-items: center;
+						flex: 1;
+						color: $u-main-color;
+						font-size: 15px;
+					}
+				}
+			}
+
+			&__right {
+				flex: 1;
+
+				&__content {
+					@include flex;
+					align-items: center;
+					flex: 1;
+
+					&__slot {
+						flex: 1;
+						@include flex;
+						align-items: center;
+					}
+
+					&__icon {
+						margin-left: 10rpx;
+						color: $u-light-color;
+						font-size: 30rpx;
+					}
+				}
+
+				&__message {
+					font-size: 12px;
+					line-height: 12px;
+					color: $u-error;
+				}
+			}
+		}
+	}
+
+/* === u-popup === */
+$u-popup-flex:1 !default;
+
+	.u-popup {
+		flex: $u-popup-flex;
+		
+		&__trigger {
+			position: relative;
+			&__cover {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+			}
+		}
+
+		&__content {
+			position: relative;
+
+			&--round-top {
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+				border-bottom-left-radius: 10px;
+				border-bottom-right-radius: 10px;
+			}
+
+			&--round-left {
+				border-top-left-radius: 0;
+				border-top-right-radius: 10px;
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 10px;
+			}
+
+			&--round-right {
+				border-top-left-radius: 10px;
+				border-top-right-radius: 0;
+				border-bottom-left-radius: 10px;
+				border-bottom-right-radius: 0;
+			}
+
+			&--round-bottom {
+				border-top-left-radius: 10px;
+				border-top-right-radius: 10px;
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
+			}
+
+			&--round-center {
+				border-top-left-radius: 10px;
+				border-top-right-radius: 10px;
+				border-bottom-left-radius: 10px;
+				border-bottom-right-radius: 10px;
+			}
+			
+			&__touch-area {
+				// position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 42rpx;
+				z-index: 10;
+				display: flex;justify-content: center;
+				align-items: center;
+			}
+			
+			&__indicator {
+				width: 100px;
+				height: 5px;
+				border-radius: 100px;
+				background-color: var(--up-light-color, #c0c4cc);
+			}
+
+			&__close {
+				position: absolute;
+
+				&--hover {
+					opacity: 0.4;
+				}
+			}
+
+			&__close--top-left {
+				top: 15px;
+				left: 15px;
+			}
+
+			&__close--top-right {
+				top: 15px;
+				right: 15px;
+			}
+
+			&__close--bottom-left {
+				bottom: 15px;
+				left: 15px;
+			}
+
+			&__close--bottom-right {
+				right: 15px;
+				bottom: 15px;
+			}
+		}
+	}
+
+/* === u-switch === */
+:root,
+page,
+body {
+	--up-switch-active-color: #3c9cff;
+	--up-switch-inactive-color: #ffffff;
+	--up-switch-dot-active-color: #ffffff;
+	--up-switch-dot-inactive-color: #ffffff;
+	--up-switch-loading-inactive-color: #aaabad;
+	--up-switch-border-color: rgba(0, 0, 0, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root,
+	page,
+	body {
+		--up-switch-active-color: #3c9cff;
+		--up-switch-inactive-color: #3a3a3c;
+		--up-switch-dot-active-color: #ffffff;
+		--up-switch-dot-inactive-color: #d1d5db;
+		--up-switch-loading-inactive-color: #9ca3af;
+		--up-switch-border-color: #4b5563;
+	}
+}
+
+[data-up-theme='light'] {
+	--up-switch-active-color: #3c9cff;
+	--up-switch-inactive-color: #ffffff;
+	--up-switch-dot-active-color: #ffffff;
+	--up-switch-dot-inactive-color: #ffffff;
+	--up-switch-loading-inactive-color: #aaabad;
+	--up-switch-border-color: rgba(0, 0, 0, 0.12);
+}
+
+[data-up-theme='dark'] {
+	--up-switch-active-color: #3c9cff;
+	--up-switch-inactive-color: #3a3a3c;
+	--up-switch-dot-active-color: #ffffff;
+	--up-switch-dot-inactive-color: #d1d5db;
+	--up-switch-loading-inactive-color: #9ca3af;
+	--up-switch-border-color: #4b5563;
+}
+
+/* === u-icon === */
+// 变量定义
+	$u-icon-primary: $u-primary !default;
+	$u-icon-success: $u-success !default;
+	$u-icon-info: $u-info !default;
+	$u-icon-warning: $u-warning !default;
+	$u-icon-error: $u-error !default;
+	$u-icon-label-line-height:1 !default;
+
+	// 2025/04/09在App/微信/支付宝/鸿蒙元服务已改用uni.loadFontFace加载字体
+	.u-icon {
+		display: flex;align-items: center;
+
+		&--left {
+			flex-direction: row-reverse;
+			align-items: center;
+		}
+
+		&--right {
+			flex-direction: row;
+			align-items: center;
+		}
+
+		&--top {
+			flex-direction: column-reverse;
+			justify-content: center;
+		}
+
+		&--bottom {
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		&__icon {
+			font-family: uicon-iconfont;
+			position: relative;
+			@include flex;
+			align-items: center;
+
+			&--primary {
+				color: $u-icon-primary;
+			}
+
+			&--success {
+				color: $u-icon-success;
+			}
+
+			&--error {
+				color: $u-icon-error;
+			}
+
+			&--warning {
+				color: $u-icon-warning;
+			}
+
+			&--info {
+				color: $u-icon-info;
+			}
+		}
+
+		&__img {
+			height: auto;
+			will-change: transform;}
+
+		&__label {
+			line-height: $u-icon-label-line-height;}
+	}
+
+/* === u-radio === */
+$u-radio-wrap-margin-right:6px !default;
+	$u-radio-wrap-font-size:20px !default;
+	$u-radio-wrap-border-width:1px !default;
+	$u-radio-wrap-border-color: #c8c9cc !default;
+	$u-radio-line-height:0 !default;
+	$u-radio-circle-border-radius:100% !default;
+	$u-radio-square-border-radius:3px !default;
+	$u-radio-checked-color:#fff !default;
+	$u-radio-checked-background-color:red !default;
+	$u-radio-checked-border-color: #2979ff !default;
+	$u-radio-disabled-background-color:var(--up-bg-color, #ebedf0) !default;
+	$u-radio-disabled--checked-color:#c8c9cc !default;
+	$u-radio-label-margin-left: 5px !default;
+	$u-radio-label-margin-right:12px !default;
+	$u-radio-label-color:$u-content-color !default;
+	$u-radio-label-font-size:15px !default;
+	$u-radio-label-disabled-color:#c8c9cc !default;
+	
+	.u-radio {
+		@include flex(row);overflow: hidden;
+		flex-direction: row;
+		align-items: center;
+		margin-bottom: 5px;
+		margin-top: 5px;
+		
+		&-label--left {
+			flex-direction: row
+		}
+
+		&-label--right {
+			flex-direction: row-reverse;
+			justify-content: space-between
+		}
+
+		&__icon-wrap {
+			box-sizing: border-box;
+			// nvue下，border-color过渡有问题
+			transition-property: border-color, background-color, color;
+			transition-duration: 0.2s;color: $u-content-color;
+			@include flex;
+			align-items: center;
+			justify-content: center;
+			color: transparent;
+			text-align: center;
+			margin-right: $u-radio-wrap-margin-right;
+			font-size: $u-radio-wrap-font-size;
+			border-width: $u-radio-wrap-border-width;
+			border-color: $u-radio-wrap-border-color;
+			border-style: solid;
+
+			// 头条小程序兼容性问题，需要设置行高为0，否则图标偏下
+			&__icon {
+				line-height: $u-radio-line-height;
+			}&--circle {
+				border-radius: $u-radio-circle-border-radius;
+			}
+
+			&--square {
+				border-radius: $u-radio-square-border-radius;
+			}
+
+			&--checked {
+				color: $u-radio-checked-color;
+				background-color: $u-radio-checked-background-color;
+				border-color: $u-radio-checked-border-color;
+			}
+
+			&--disabled {
+				background-color: $u-radio-disabled-background-color !important;
+			}
+
+			&--disabled--checked {
+				color: $u-radio-disabled--checked-color !important;
+			}
+		}
+
+		&__label {
+			word-wrap: break-word;margin-left: $u-radio-label-margin-left;
+			margin-right: $u-radio-label-margin-right;
+			color: $u-radio-label-color;
+			font-size: $u-radio-label-font-size;
+
+			&--disabled {
+				color: $u-radio-label-disabled-color;
+			}
+		}
+	}
+
+/* === u-radio-group === */
+.u-radio-group {
+		flex: 1;
+
+		&--row {
+			display: flex;flex-flow: row wrap;
+		}
+
+		&--column {
+			@include flex(column);
+		}
+	}
+

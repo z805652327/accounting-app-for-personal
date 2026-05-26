@@ -1,0 +1,56 @@
+{
+  "pages": [
+    {"path": "pages/index/index", "style": {"navigationBarTitleText": "首页"}},
+    {"path": "pages/transactions/add", "style": {"navigationBarTitleText": "记一笔"}},
+    {"path": "pages/transactions/detail", "style": {"navigationBarTitleText": "交易详情"}},
+    {"path": "pages/transactions/search", "style": {"navigationBarTitleText": "搜索交易"}},
+    {"path": "pages/accounts/index", "style": {"navigationBarTitleText": "账户"}},
+    {"path": "pages/accounts/detail", "style": {"navigationBarTitleText": "账户详情"}},
+    {"path": "pages/reports/index", "style": {"navigationBarTitleText": "报表"}},
+    {"path": "pages/reports/balance-sheet", "style": {"navigationBarTitleText": "资产负债表"}},
+    {"path": "pages/reports/income-statement", "style": {"navigationBarTitleText": "利润表"}},
+    {"path": "pages/reports/cash-flow", "style": {"navigationBarTitleText": "现金流量表"}},
+    {"path": "pages/reports/subject-balance", "style": {"navigationBarTitleText": "科目余额表"}},
+    {"path": "pages/settings/index", "style": {"navigationBarTitleText": "设置"}},
+    {"path": "pages/settings/subjects", "style": {"navigationBarTitleText": "科目管理"}},
+    {"path": "pages/settings/depreciation", "style": {"navigationBarTitleText": "折旧管理"}},
+    {"path": "pages/settings/amortization", "style": {"navigationBarTitleText": "摊销管理"}},
+    {"path": "pages/settings/budget", "style": {"navigationBarTitleText": "预算管理"}},
+    {"path": "pages/settings/export", "style": {"navigationBarTitleText": "导出数据"}},
+    {"path": "pages/settings/import", "style": {"navigationBarTitleText": "导入数据"}},
+    {"path": "pages/pending/index", "style": {"navigationBarTitleText": "待处理事项"}},
+    {"path": "pages/setup/index", "style": {"navigationBarTitleText": "资产初始化"}},
+    {"path": "pages/reports/subject-detail", "style": {"navigationBarTitleText": "科目明细"}},
+    {"path": "pages/settings/security", "style": {"navigationBarTitleText": "安全设置"}},
+    {"path": "pages/settings/edit-history", "style": {"navigationBarTitleText": "编辑历史"}},
+    {"path": "pages/settings/reconciliation", "style": {"navigationBarTitleText": "数据对账"}},
+    {"path": "pages/settings/recurring", "style": {"navigationBarTitleText": "定期记账"}},
+    {"path": "pages/settings/tags", "style": {"navigationBarTitleText": "标签管理"}},
+    {"path": "pages/settings/recently-deleted", "style": {"navigationBarTitleText": "最近删除"}},
+    {"path": "pages/settings/indicators", "style": {"navigationBarTitleText": "自定义指标"}},
+    {"path": "pages/settings/saved-reports", "style": {"navigationBarTitleText": "自定义报表"}},
+    {"path": "pages/settings/year-end-close", "style": {"navigationBarTitleText": "年末结账"}},
+    {"path": "pages/reports/expense-analysis", "style": {"navigationBarTitleText": "固定vs弹性分析"}},
+    {"path": "pages/reports/expense-ranking", "style": {"navigationBarTitleText": "消费排行榜"}},
+    {"path": "pages/reports/budget-report", "style": {"navigationBarTitleText": "预算执行报告"}},
+    {"path": "pages/reports/auxiliary", "style": {"navigationBarTitleText": "辅助报表"}}
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "个人记账",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#007AFF",
+    "borderStyle": "black",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {"pagePath": "pages/index/index", "text": "首页"},
+      {"pagePath": "pages/accounts/index", "text": "账户"},
+      {"pagePath": "pages/reports/index", "text": "报表"},
+      {"pagePath": "pages/settings/index", "text": "设置"}
+    ]
+  }
+}

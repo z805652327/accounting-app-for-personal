@@ -1,0 +1,98 @@
+/* ======================================
+   Design System · 精账簿
+   Japanese Stationery × Swiss Precision
+   ====================================== */
+
+// ── Color Palette ──
+$color-bg:             #F2EFE9;   // washi paper
+$color-bg-alt:         #E8E4DC;   // deeper paper
+$color-surface:        #FDFCF9;   // card white
+$color-surface-hover:  #F7F4EE;
+
+$color-primary:        #1C1915;   // sumi ink
+$color-primary-light:  #2D2A26;
+$color-primary-muted:  #4A4743;
+
+$color-accent:         #C44536;   // vermillion — used sparingly
+$color-accent-light:   #D6685B;
+$color-accent-muted:   #A83A2D;
+
+$color-income:         #2D7D7A;   // deep teal
+$color-income-bg:      #EDF6F5;
+$color-expense:        #C44536;   // vermillion
+$color-expense-bg:     #FDF4F2;
+
+$color-text-primary:   #1C1915;
+$color-text-secondary: #6B6560;
+$color-text-tertiary:  #9E9790;
+$color-text-inverse:   #FCFAF7;
+
+$color-border:         #E0DBD3;
+$color-border-light:   #EDE8E0;
+
+$color-ink-gradient:   linear-gradient(160deg, #1C1915 0%, #2D2A26 60%, #3D3A35 100%);
+
+// ── Typography ──
+$font-display: 'Noto Serif SC', 'Source Han Serif SC', 'STSong', 'Songti SC', serif;
+$font-mono:    'DM Mono', 'JetBrains Mono', 'Source Code Pro', 'SF Mono', monospace;
+$font-body:    -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+
+// ── Spacing Scale ──
+$sp-xs:  8rpx;
+$sp-sm:  16rpx;
+$sp-md:  24rpx;
+$sp-lg:  32rpx;
+$sp-xl:  48rpx;
+$sp-2xl: 64rpx;
+
+// ── Border Radius ──
+$radius-sm:  4rpx;
+$radius-md:  8rpx;
+$radius-lg:  12rpx;
+$radius-xl:  16rpx;
+$radius-full: 9999rpx;
+
+// ── Shadows (softer, more refined) ──
+$shadow-sm:  0 1rpx 4rpx rgba(28, 25, 21, 0.04);
+$shadow-md:  0 2rpx 12rpx rgba(28, 25, 21, 0.06);
+$shadow-lg:  0 4rpx 24rpx rgba(28, 25, 21, 0.08);
+
+// ── Transitions ──
+$transition-fast:   180ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow:   500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+// ── Paper texture (SVG noise) ──
+@mixin paper-texture {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    z-index: 0;
+  }
+}
+
+// ── Mixins ──
+@mixin card {
+  background: $color-surface;
+  border-radius: $radius-md;
+  box-shadow: $shadow-sm;
+  border: 1rpx solid $color-border-light;
+}
+
+@mixin text-balance {
+  font-family: $font-mono;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+// ── Horizontal rule — recurring motif ──
+@mixin hairline($color: $color-border) {
+  height: 1rpx;
+  background: $color;
+  border: none;
+}

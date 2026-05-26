@@ -1,0 +1,11 @@
+{
+  "name": "个人记账",
+  "appid": "__UNI__UNKNOWN",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "uni-app-center": {
+    "h5": {
+      "title": "个人记账"
+    }
+  }
+}
