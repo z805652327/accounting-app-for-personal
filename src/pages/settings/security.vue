@@ -15,6 +15,10 @@
 
     <div class="card">
       <div class="card-title">数据安全</div>
+      <div class="form-row">
+        <span class="label">保存路径</span>
+        <el-input v-model="backupPath" placeholder="/Download/FinBook" size="small" />
+      </div>
       <el-button type="warning" size="small" @click="exportBackup">导出数据库备份</el-button>
       <el-button type="info" size="small" @click="importBackup" class="mt-12">导入数据库备份</el-button>
     </div>
@@ -30,6 +34,7 @@ const enabled = ref(false)
 const hasPin = ref(false)
 const pin = ref('')
 const pinConfirm = ref('')
+const backupPath = ref('/Download/FinBook')
 
 onShow(async () => {
   const db = await getDatabase()
@@ -83,13 +88,14 @@ async function exportBackup() {
   // Capacitor/Android: save to file system
   try {
     const { Filesystem, Directory } = await import('@capacitor/filesystem')
+    const dir = backupPath.value.replace(/\/$/, '')
     await Filesystem.writeFile({
-      path: `Download/FinBook/${filename}`,
+      path: `${dir}/${filename}`,
       data: json,
       directory: Directory.External,
       recursive: true,
     })
-    uni.showToast({ title: '已保存到 Download/FinBook/' + filename })
+    uni.showToast({ title: '已保存到 ' + dir + '/' + filename })
     return
   } catch {}
 
@@ -115,4 +121,6 @@ async function importBackup() {
 .toggle-row { display: flex; justify-content: space-between; align-items: center; }
 .pin-section { margin-top: 8px; }
 .mt-12 { margin-top: 6px; }
+.form-row { margin-bottom: 8px; }
+.label { font-size: 12px; color: #6B6560; margin-bottom: 4px; display: block; }
 </style>
