@@ -228,98 +228,70 @@ export class ReportGenerator {
     const balances = await this.calculator.calculate(year, month)
     const period = `${year}-${String(month).padStart(2, '0')}`
 
-    // Get all subjects for L1/L2 hierarchy
+    // BalanceCalculator already rolls up L3→L2, so L2 closingBalance includes L3 children.
+    // Only use L2-level balances to avoid double-counting.
+    const l2Balances = balances.filter(b => b.level === 2)
+    const l1Balances = new Map<number, number>() // L1 → total from L2 children
+
+    // Get subject hierarchy for display
     const allSubjects = await this.db.query<{ id: number; code: string; name: string; level: number; parentId: number | null; subjectType: string; expenseType: string | null }>(
       'SELECT id, code, name, level, parent_id, subject_type, expense_type FROM accounting_subjects WHERE is_active = 1'
     )
 
-    // Build L3→L2 rollup: map each balance to its effective L2
-    // L3 balances go to parent L2, L2 balances stay as-is
-    const l2BalanceMap = new Map<number, number>() // L2 subjectId → total balance
-    const l1BalanceMap = new Map<number, number>() // L1 subjectId → total balance
-    const l2ToL1 = new Map<number, number>() // L2 → L1 parent
-    const l2Info = new Map<number, { name: string; code: string; expenseType: string | null }>()
-
-    // Build L2→L1 mapping
-    for (const s of allSubjects) {
-      if (s.level === 2 && s.parentId) l2ToL1.set(s.id, s.parentId)
-      if (s.level === 2) l2Info.set(s.id, { name: s.name, code: s.code, expenseType: s.expenseType })
-    }
-
-    // Roll up balances: L3→L2, L2→L1
-    for (const b of balances) {
-      let l2Id: number | undefined
-      if (b.level === 2) {
-        l2Id = b.subjectId
-      } else if (b.level === 3) {
-        // Find parent L2
-        const parentCode = b.subjectCode.substring(0, 5)
-        const parent = allSubjects.find(s => s.level === 2 && s.code === parentCode)
-        if (parent) l2Id = parent.id
-      }
-      if (l2Id) {
-        const cur = l2BalanceMap.get(l2Id) || 0
-        l2BalanceMap.set(l2Id, cur + b.closingBalance)
-        // Roll up to L1
-        const l1Id = l2ToL1.get(l2Id)
-        if (l1Id) {
-          l1BalanceMap.set(l1Id, (l1BalanceMap.get(l1Id) || 0) + b.closingBalance)
-        }
-      }
-    }
-
-    // Build L1 items (for section headers in display)
     const l1Info = new Map<number, { name: string; code: string }>()
     for (const s of allSubjects) {
       if (s.level === 1) l1Info.set(s.id, { name: s.name, code: s.code })
     }
 
-    const incomes: { name: string; amount: number; level: number; category: string; code: string; expenseType?: string | null }[] = []
-    const expenses: { name: string; amount: number; level: number; category: string; code: string; expenseType?: string | null }[] = []
+    const incomes: { name: string; amount: number; level: number; category: string; code: string }[] = []
+    const expenses: { name: string; amount: number; level: number; category: string; code: string; expenseType: string | null }[] = []
 
-    // Output L1 headers + L2 details (including zero-balance L2)
-    for (const s of allSubjects) {
-      if (s.level !== 2) continue
-      if (s.subjectType !== 'income' && s.subjectType !== 'expense') continue
-      const amt = Math.round((l2BalanceMap.get(s.id) || 0) * 100) / 100
-      const l1Id = l2ToL1.get(s.id)
-      const l1 = l1Id ? l1Info.get(l1Id) : null
-      const item = {
-        name: s.name, amount: amt, level: 2,
-        category: s.code.substring(0, 3), code: s.code,
-        expenseType: s.expenseType,
-        l1Name: l1?.name || '', l1Code: l1?.code || ''
+    let totalIncome = 0
+    let totalExpense = 0
+    let fixedExpense = 0
+
+    for (const b of l2Balances) {
+      if (b.subjectType !== 'income' && b.subjectType !== 'expense') continue
+      const amt = Math.round(b.closingBalance * 100) / 100
+      const l1Id = b.parentId
+      if (l1Id) {
+        l1Balances.set(l1Id, (l1Balances.get(l1Id) || 0) + amt)
       }
-      if (s.subjectType === 'income') incomes.push(item)
-      else expenses.push(item)
+
+      // Sum totals from L2 only (L3 already rolled up by BalanceCalculator)
+      if (b.subjectType === 'income') {
+        totalIncome += amt
+        incomes.push({ name: b.subjectName, amount: amt, level: 2, category: b.subjectCode.substring(0, 3), code: b.subjectCode })
+      } else {
+        totalExpense += amt
+        if (b.expenseType === 'fixed') fixedExpense += amt
+        expenses.push({ name: b.subjectName, amount: amt, level: 2, category: b.subjectCode.substring(0, 3), code: b.subjectCode, expenseType: b.expenseType })
+      }
     }
 
-    // Add L1 totals
-    for (const [l1Id, l1Amt] of l1BalanceMap) {
+    // Add L1 headers (for display only, not included in totals)
+    for (const [l1Id, l1Amt] of l1Balances) {
       const l1 = l1Info.get(l1Id)
       if (!l1) continue
-      const amt = Math.round(l1Amt * 100) / 100
-      const l2children = allSubjects.filter(s => s.level === 2 && s.parentId === l1Id)
-      const stype = l2children[0]?.subjectType
-      const item = { name: l1.name, amount: amt, level: 1, category: l1.code, code: l1.code, l1Name: '', l1Code: l1.code }
-      if (stype === 'income') incomes.unshift(item)
-      else if (stype === 'expense') expenses.unshift(item)
+      const item = { name: l1.name, amount: Math.round(l1Amt * 100) / 100, level: 1, category: l1.code, code: l1.code }
+      // Insert before the first L2 child of this L1
+      const stype = allSubjects.find(s => s.level === 2 && s.parentId === l1Id)?.subjectType
+      if (stype === 'income') {
+        incomes.unshift(item)
+      } else if (stype === 'expense') {
+        expenses.unshift(item)
+      }
     }
 
-    const totalIncome = incomes.reduce((s, i) => s + i.amount, 0)
-    const totalExpense = expenses.reduce((s, e) => s + e.amount, 0)
-
-    // Fixed vs variable from DB expense_type field (not hardcoded code prefixes)
-    const fixedExpense = balances
-      .filter(b => b.subjectType === 'expense' && b.expenseType === 'fixed')
-      .reduce((s, b) => s + b.closingBalance, 0)
-    const variableExpense = totalExpense - fixedExpense
+    totalIncome = Math.round(totalIncome * 100) / 100
+    totalExpense = Math.round(totalExpense * 100) / 100
+    const variableExpense = totalExpense - Math.round(fixedExpense * 100) / 100
 
     return {
       period,
       incomes, expenses,
-      totalIncome: Math.round(totalIncome * 100) / 100,
-      totalExpense: Math.round(totalExpense * 100) / 100,
+      totalIncome,
+      totalExpense,
       netSurplus: Math.round((totalIncome - totalExpense) * 100) / 100,
       fixedExpense: Math.round(fixedExpense * 100) / 100,
       variableExpense: Math.round(variableExpense * 100) / 100,

@@ -89,34 +89,43 @@ async function exportBackup() {
   try {
     const { Filesystem, Directory } = await import('@capacitor/filesystem')
     const dir = backupPath.value.replace(/\/$/, '')
-    // Try External (public storage) first
+    // Save to app Documents first (always writable), then try External
+    let saved = false
+    // Primary: try External (public Download folder)
     try {
       await Filesystem.writeFile({
-        path: `${dir}/${filename}`,
-        data: json,
-        directory: Directory.External,
-        recursive: true,
+        path: `${dir}/${filename}`, data: json,
+        directory: Directory.External, recursive: true,
       })
       uni.showToast({ title: '已保存到 ' + dir + '/' + filename })
-      return
+      saved = true
     } catch (e1: any) {
-      console.warn('External storage failed:', e1.message)
-      // Fallback: save to app Documents directory
+      console.warn('External write failed:', e1.message)
+    }
+    // Fallback: app Documents directory
+    if (!saved) {
       try {
         await Filesystem.writeFile({
-          path: filename,
-          data: json,
+          path: filename, data: json,
           directory: Directory.Documents,
         })
-        uni.showToast({ title: '已保存到应用文档目录: ' + filename })
-        return
+        uni.showToast({ title: '已保存到应用文档: ' + filename })
+        saved = true
       } catch (e2: any) {
-        console.warn('Documents storage failed:', e2.message)
-        throw new Error('无法写入存储: ' + e2.message)
+        console.warn('Documents write failed:', e2.message)
       }
     }
+    // Last resort: app Data directory
+    if (!saved) {
+      await Filesystem.writeFile({
+        path: filename, data: json,
+        directory: Directory.Data,
+      })
+      uni.showToast({ title: '已保存到应用数据目录' })
+    }
+    return
   } catch (e: any) {
-    console.error('Capacitor export error:', e.message)
+    console.error('All Capacitor write attempts failed:', e.message)
   }
 
   // Desktop/Browser fallback

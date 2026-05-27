@@ -265,8 +265,8 @@ function viewTx(tx: any) {
 
 /* ── Lifecycle ── */
 onShow(async () => {
-  subjectStore.load()
-  accountStore.load()
+  try {
+  await Promise.all([subjectStore.load(), accountStore.load()])
   txStore.loadRecent()
 
   const db = await getDatabase()
@@ -302,6 +302,7 @@ onShow(async () => {
   )
   budgetCap.value = overall?.monthlyCap ?? 0
   budgetUsed.value = expenseTotal.value
+  } catch (e) { console.error('Dashboard load error:', e) }
 })
 </script>
 
