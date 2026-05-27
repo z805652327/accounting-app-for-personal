@@ -89,24 +89,48 @@ async function exportBackup() {
   try {
     const { Filesystem, Directory } = await import('@capacitor/filesystem')
     const dir = backupPath.value.replace(/\/$/, '')
-    await Filesystem.writeFile({
-      path: `${dir}/${filename}`,
-      data: json,
-      directory: Directory.External,
-      recursive: true,
-    })
-    uni.showToast({ title: '已保存到 ' + dir + '/' + filename })
-    return
-  } catch {}
+    // Try External (public storage) first
+    try {
+      await Filesystem.writeFile({
+        path: `${dir}/${filename}`,
+        data: json,
+        directory: Directory.External,
+        recursive: true,
+      })
+      uni.showToast({ title: '已保存到 ' + dir + '/' + filename })
+      return
+    } catch (e1: any) {
+      console.warn('External storage failed:', e1.message)
+      // Fallback: save to app Documents directory
+      try {
+        await Filesystem.writeFile({
+          path: filename,
+          data: json,
+          directory: Directory.Documents,
+        })
+        uni.showToast({ title: '已保存到应用文档目录: ' + filename })
+        return
+      } catch (e2: any) {
+        console.warn('Documents storage failed:', e2.message)
+        throw new Error('无法写入存储: ' + e2.message)
+      }
+    }
+  } catch (e: any) {
+    console.error('Capacitor export error:', e.message)
+  }
 
   // Desktop/Browser fallback
-  const blob = new Blob([json], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url; a.download = filename
-  a.click()
-  URL.revokeObjectURL(url)
-  uni.showToast({ title: '备份已导出' })
+  try {
+    const blob = new Blob([json], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url; a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
+    uni.showToast({ title: '备份已导出' })
+  } catch (e: any) {
+    uni.showToast({ title: '导出失败: ' + (e.message || '未知') })
+  }
 }
 
 async function importBackup() {
