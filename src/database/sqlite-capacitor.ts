@@ -52,10 +52,7 @@ export class CapacitorDatabase implements IDatabase {
 
   private async getSqlJs(): Promise<any> {
     return initSqlJs({
-      locateFile: (file: string) => {
-        const mapped = file.replace('sql-wasm-browser', 'sql-wasm')
-        return `https://sql.js.org/dist/${mapped}`
-      }
+      locateFile: (file: string) => file
     })
   }
 

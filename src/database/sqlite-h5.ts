@@ -16,11 +16,7 @@ export class H5Database implements IDatabase {
 
   async init(): Promise<void> {
     const SQL = await initSqlJs({
-      locateFile: (file: string) => {
-        // sql.js 1.11 requests sql-wasm-browser.wasm, but CDN has it as sql-wasm.wasm
-        const mapped = file.replace('sql-wasm-browser', 'sql-wasm')
-        return `https://sql.js.org/dist/${mapped}`
-      }
+      locateFile: (file: string) => file
     })
     const saved = localStorage.getItem(STORAGE_KEY_PREFIX + this.dbName)
     if (saved) {

@@ -83,6 +83,8 @@ onMounted(async () => {
   } catch (e) {
     console.error('Init error:', e)
   }
+  // Remove splash screen
+  ;(window as any).__hideSplash?.()
 })
 </script>
 

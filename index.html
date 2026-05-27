@@ -2,13 +2,43 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#F2EFE9" />
     <title>FinBook · 个人账本</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      /* Splash screen — shown instantly while JS/WASM loads */
+      #splash {
+        position: fixed; inset: 0; z-index: 99999;
+        background: #F2EFE9;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        font-family: 'Noto Serif SC', serif;
+        transition: opacity 0.3s ease;
+      }
+      #splash.hide { opacity: 0; pointer-events: none; }
+      #splash .logo { font-size: 28px; font-weight: 700; color: #1C1915; letter-spacing: 0.04em; }
+      #splash .tagline { font-size: 13px; color: #9E9790; margin-top: 6px; }
+      #splash .loader { margin-top: 24px; width: 24px; height: 24px; border: 2px solid #E0DBD3; border-top-color: #C44536; border-radius: 50%; animation: spin 0.8s linear infinite; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+    <script>
+      // Remove splash when Vue mounts
+      window.__hideSplash = function() {
+        var s = document.getElementById('splash');
+        if (s) { s.classList.add('hide'); setTimeout(function() { s.remove(); }, 350); }
+      };
+    </script>
   </head>
   <body>
+    <div id="splash">
+      <div class="logo">FinBook</div>
+      <div class="tagline">精账簿 · 个人账本</div>
+      <div class="loader"></div>
+    </div>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

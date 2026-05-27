@@ -36,7 +36,8 @@
       "Bash(findstr :5175)",
       "Bash(findstr :5178)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5175)",
-      "Bash(D:/node.js/node.exe -e ' *)"
+      "Bash(D:/node.js/node.exe -e ' *)",
+      "Bash(\"D:/node.js/node.exe\" -e \"const fs=require\\('fs'\\);const files=fs.readdirSync\\('dist'\\).filter\\(f=>f.endsWith\\('.wasm'\\)\\);console.log\\('WASM in dist:', files.join\\(', '\\), files.map\\(f=>\\(fs.statSync\\('dist/'+f\\).size/1024\\).toFixed\\(0\\)+'KB'\\).join\\(', '\\)\\)\")"
     ],
     "additionalDirectories": [
       "\\tmp"
