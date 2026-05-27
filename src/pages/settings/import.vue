@@ -51,7 +51,7 @@ async function pickFile() {
   loading.value = true
   try {
     const paths = await new Promise<string[]>((resolve) => {
-      uni.chooseImage({ count: 1, success: (res) => resolve(res.tempFilePaths as string[]) })
+      uni.chooseFile({ accept: '.json,application/json', success: (res) => resolve(res.tempFilePaths as string[]) })
     })
     const file = paths[0]
     if (!file) return

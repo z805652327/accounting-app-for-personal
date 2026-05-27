@@ -80,6 +80,23 @@ const uni = {
     }
     input.click()
   },
+  chooseFile({ accept, success }: {
+    accept?: string
+    success?: (res: { tempFilePaths: string[] }) => void
+  }) {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = accept || '*/*'
+    input.onchange = () => {
+      const files: string[] = []
+      for (let i = 0; i < (input.files?.length || 0); i++) {
+        const file = input.files![i]
+        if (file) files.push(URL.createObjectURL(file))
+      }
+      if (success) success({ tempFilePaths: files })
+    }
+    input.click()
+  },
   // Polyfills needed by uview-plus components
   upx2px(value: number): number {
     // rpx → px: on H5, 1rpx ≈ 0.5px at 750rpx design width
