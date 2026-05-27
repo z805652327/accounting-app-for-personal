@@ -97,20 +97,26 @@ const fmt = ref('csv')
 const loading = ref(false)
 
 async function downloadBlob(data: Uint8Array | string, filename: string, mime: string) {
-  // Capacitor/Android: save to user-accessible directory
+  // Capacitor/Android: request permission, save to ExternalStorage
   if (isCapacitor.value) {
     try {
       const { Filesystem, Directory } = await import('@capacitor/filesystem')
+      try { await Filesystem.requestPermissions() } catch {}
       const content = typeof data === 'string' ? data : new Uint8Array(data)
-      const path = exportPath.value.replace(/\/$/, '') + '/' + filename
-      await Filesystem.writeFile({
-        path,
-        data: typeof content === 'string' ? content : new Uint8Array(content),
-        directory: Directory.External,
-        recursive: true,
-      })
-      uni.showToast({ title: '已保存到: ' + path })
-      return
+      const fp = exportPath.value.replace(/\/$/, '') + '/' + filename
+      try {
+        await Filesystem.writeFile({ path: fp, data: typeof content === 'string' ? content : new Uint8Array(content), directory: Directory.ExternalStorage, recursive: true })
+        uni.showToast({ title: '已保存到: ' + fp })
+        return
+      } catch (e1: any) {
+        console.warn('ExternalStorage failed:', e1.message)
+        try {
+          await Filesystem.writeFile({ path: filename, data: typeof content === 'string' ? content : new Uint8Array(content), directory: Directory.Data })
+          uni.showToast({ title: '已保存到应用数据目录' })
+          return
+        } catch {}
+        throw e1
+      }
     } catch (e: any) {
       uni.showToast({ title: '保存失败: ' + (e.message || '未知错误'), icon: 'none' })
       return

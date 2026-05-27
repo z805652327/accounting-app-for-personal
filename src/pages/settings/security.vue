@@ -85,47 +85,54 @@ async function exportBackup() {
   const json = JSON.stringify(data, null, 2)
   const filename = `backup_${new Date().toISOString().slice(0, 10)}.json`
 
-  // Capacitor/Android: save to file system
+  // Capacitor/Android: request permissions, then save to file system
   try {
     const { Filesystem, Directory } = await import('@capacitor/filesystem')
+
+    // Request storage permission first
+    try {
+      const perm = await Filesystem.requestPermissions()
+      console.log('Storage permission:', perm?.publicStorage)
+    } catch {}
+
     const dir = backupPath.value.replace(/\/$/, '')
-    // Save to app Documents first (always writable), then try External
     let saved = false
-    // Primary: try External (public Download folder)
+
+    // Primary: ExternalStorage (public Downloads folder, needs permission)
     try {
       await Filesystem.writeFile({
         path: `${dir}/${filename}`, data: json,
-        directory: Directory.External, recursive: true,
+        directory: Directory.ExternalStorage, recursive: true,
       })
       uni.showToast({ title: '已保存到 ' + dir + '/' + filename })
       saved = true
     } catch (e1: any) {
-      console.warn('External write failed:', e1.message)
+      console.warn('ExternalStorage failed:', e1.message)
     }
-    // Fallback: app Documents directory
+
+    // Fallback: app Documents
     if (!saved) {
       try {
         await Filesystem.writeFile({
-          path: filename, data: json,
-          directory: Directory.Documents,
+          path: filename, data: json, directory: Directory.Documents,
         })
         uni.showToast({ title: '已保存到应用文档: ' + filename })
         saved = true
       } catch (e2: any) {
-        console.warn('Documents write failed:', e2.message)
+        console.warn('Documents failed:', e2.message)
       }
     }
-    // Last resort: app Data directory
+
+    // Last resort: app Data
     if (!saved) {
       await Filesystem.writeFile({
-        path: filename, data: json,
-        directory: Directory.Data,
+        path: filename, data: json, directory: Directory.Data,
       })
       uni.showToast({ title: '已保存到应用数据目录' })
     }
     return
   } catch (e: any) {
-    console.error('All Capacitor write attempts failed:', e.message)
+    console.error('Export error:', e.message)
   }
 
   // Desktop/Browser fallback
